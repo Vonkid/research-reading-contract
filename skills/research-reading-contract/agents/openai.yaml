@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Reading Contract"
+  short_description: "Verify PDF reading coverage and claim anchors"
+  default_prompt: "Use $research-reading-contract to read this scientific PDF with verifiable coverage and claim-to-source anchors."

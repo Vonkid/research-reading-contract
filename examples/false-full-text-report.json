@@ -1,0 +1,24 @@
+{
+  "protocol_version": "0.1",
+  "report_id": "example-false-full-text-001",
+  "source": {
+    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "page_count": 10,
+    "title": "Example paper with incomplete coverage"
+  },
+  "reading": {
+    "claimed_level": "R3_FULL_TEXT_VERIFIED"
+  },
+  "coverage": {
+    "abstract_pages": [1],
+    "required_pages": [],
+    "required_sections": [],
+    "sections_read": ["Abstract"],
+    "supplementary_status": "not_accessed"
+  },
+  "claims": [],
+  "answer_status": "insufficient_evidence",
+  "limitations": [
+    "Only the abstract was accessed; the verifier must downgrade this self-reported R3 claim."
+  ]
+}

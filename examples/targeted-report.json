@@ -1,0 +1,39 @@
+{
+  "protocol_version": "0.1",
+  "report_id": "example-targeted-001",
+  "source": {
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "page_count": 8,
+    "title": "Example study"
+  },
+  "reading": {
+    "claimed_level": "R2_TARGETED_VERIFIED",
+    "target_question": "What evidence supports the primary endpoint?"
+  },
+  "coverage": {
+    "abstract_pages": [1],
+    "required_pages": [1, 3, 4, 6],
+    "required_sections": ["Methods", "Results"],
+    "sections_read": ["Abstract", "Methods", "Results"],
+    "supplementary_status": "not_accessed"
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "claim_text": "The paper reports a difference in the declared primary endpoint.",
+      "epistemic_status": "direct",
+      "evidence_refs": [
+        {
+          "page": 4,
+          "section": "Results",
+          "quote": "The primary endpoint differed between the two groups.",
+          "support_type": "supports"
+        }
+      ]
+    }
+  ],
+  "answer_status": "provisional",
+  "limitations": [
+    "This example has placeholder source identity and requires matching receipts before verification."
+  ]
+}
