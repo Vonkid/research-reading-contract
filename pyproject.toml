@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "research-reading-contract"
-version = "0.1.0"
+version = "0.2.0"
 description = "A model-agnostic reading integrity protocol for scientific PDF agents"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -14,6 +14,7 @@ keywords = ["llm", "scientific-literature", "agents", "provenance", "pdf"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -31,6 +32,13 @@ Issues = "https://github.com/Vonkid/research-reading-contract/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+research_reading_contract = [
+  "bundled_skill/*",
+  "bundled_skill/agents/*",
+  "bundled_skill/references/*",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

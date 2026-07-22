@@ -12,6 +12,39 @@ It addresses a common failure mode in research agents: an answer says it read th
 
 RRC verifies the first two. It does **not** prove comprehension, scientific truth, or methodological quality.
 
+## Install through your existing agent
+
+RRC does not replace Codex or Claude Code and does not add another chat application. Give the following prompt to the agent you already use:
+
+```text
+Install Research Reading Contract for the agent you are currently running.
+Repository: https://github.com/Vonkid/research-reading-contract
+Read AGENT_INSTALL.md and follow the user-scope procedure. Use an isolated
+environment, run the final doctor check, and report the installed path. Do not
+request API keys, upload papers, or modify unrelated agent settings.
+```
+
+The agent clones the repository, runs one bootstrap script, and verifies the installation. Afterwards:
+
+- in Codex, mention `$research-reading-contract` in a reading task;
+- in Claude Code, use `/research-reading-contract` or ask Claude to use it.
+
+No separate desktop app, model provider, or API key is required.
+
+For a small colleague trial, use [`PILOT_GUIDE.md`](PILOT_GUIDE.md).
+
+### Direct installation
+
+For people who prefer a terminal:
+
+```bash
+git clone https://github.com/Vonkid/research-reading-contract.git
+cd research-reading-contract
+python3 scripts/bootstrap.py --agent codex
+```
+
+Use `--agent claude` for Claude Code or `--agent both` for both. On Windows, run `py -3 scripts\bootstrap.py --agent codex`.
+
 ## What it does
 
 - fingerprints a PDF and records its page count;
@@ -32,7 +65,7 @@ RRC verifies the first two. It does **not** prove comprehension, scientific trut
 
 `R3` is intentionally strict. A model cannot grant it to itself by writing `full_text` in JSON.
 
-## Quick start
+## Developer quick start
 
 ```bash
 python -m pip install -e .
@@ -106,7 +139,7 @@ RRC is deliberately narrower than a literature-review agent, memory system, or s
 
 ## Status
 
-Version `0.1.0` is a working reference implementation and a proposal for community discussion. The schema may evolve before `1.0`.
+Version `0.2.0` adds isolated, agent-driven setup for Codex and Claude Code. The protocol schema remains pre-1.0 and may evolve.
 
 ## License
 

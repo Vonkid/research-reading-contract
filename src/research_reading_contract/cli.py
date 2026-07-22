@@ -7,6 +7,13 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
+from .installer import (
+    checks_as_dict,
+    doctor_checks,
+    expand_agents,
+    install_skills,
+    results_as_dict,
+)
 from .ledger import append_page_access_events, validate_ledger
 from .pdf_reader import extract_pages, parse_page_spec, pdf_manifest
 from .verifier import verify_report
@@ -54,6 +61,43 @@ def build_parser() -> argparse.ArgumentParser:
     verify_parser.add_argument(
         "--pdf", help="Optional source PDF for digest, page-count, and quote verification."
     )
+
+    setup_parser = subparsers.add_parser(
+        "setup", help="Install RRC into an existing Codex or Claude Code workflow."
+    )
+    setup_parser.add_argument(
+        "--agent",
+        choices=["codex", "claude", "both"],
+        default="both",
+        help="Agent integration to install (default: both).",
+    )
+    setup_parser.add_argument(
+        "--scope",
+        choices=["user", "project"],
+        default="user",
+        help="Install for the current user or one project (default: user).",
+    )
+    setup_parser.add_argument(
+        "--project",
+        help="Project root for --scope project (default: current directory).",
+    )
+    setup_parser.add_argument(
+        "--force", action="store_true", help="Replace an unrecognized existing skill."
+    )
+
+    doctor_parser = subparsers.add_parser(
+        "doctor", help="Check the runtime and installed agent integrations."
+    )
+    doctor_parser.add_argument(
+        "--agent",
+        choices=["codex", "claude", "both"],
+        default="both",
+        help="Agent integration to check (default: both).",
+    )
+    doctor_parser.add_argument(
+        "--scope", choices=["user", "project"], default="user"
+    )
+    doctor_parser.add_argument("--project", help="Project root for project scope.")
     return parser
 
 
@@ -91,6 +135,50 @@ def main(argv: list[str] | None = None) -> int:
             )
             _print_json(result.to_dict())
             return 0 if result.publishable_at_claimed_level else 2
+
+        if args.command == "setup":
+            agents = expand_agents(args.agent)
+            results = install_skills(
+                agents,
+                scope=args.scope,
+                project_root=args.project,
+                force=args.force,
+            )
+            _print_json(
+                {
+                    "version": __version__,
+                    "installed": results_as_dict(results),
+                    "next_step": (
+                        "Restart the agent if the skill is not detected, then run "
+                        "the doctor subcommand with the same RRC command, --agent, "
+                        "and --scope values."
+                    ),
+                }
+            )
+            return 0
+
+        if args.command == "doctor":
+            agents = expand_agents(args.agent)
+            checks = doctor_checks(
+                agents, scope=args.scope, project_root=args.project
+            )
+            ready = all(
+                check.ok
+                for check in checks
+                if not check.name.endswith("_command")
+            )
+            _print_json(
+                {
+                    "version": __version__,
+                    "ready": ready,
+                    "checks": checks_as_dict(checks),
+                    "note": (
+                        "Agent command discovery is informational. The installed skill "
+                        "uses its recorded Python runtime directly."
+                    ),
+                }
+            )
+            return 0 if ready else 2
 
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"rrc: error: {exc}", file=sys.stderr)

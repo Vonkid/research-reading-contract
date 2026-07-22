@@ -3,4 +3,4 @@
 from .verifier import ReadingLevel, VerificationResult, verify_report
 
 __all__ = ["ReadingLevel", "VerificationResult", "verify_report"]
-__version__ = "0.1.0"
+__version__ = "0.2.0"

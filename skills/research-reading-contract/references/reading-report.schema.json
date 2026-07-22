@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Vonkid/research-reading-contract/schemas/reading-report.schema.json",
+  "title": "Research Reading Contract report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "report_id",
+    "source",
+    "reading",
+    "coverage",
+    "claims",
+    "answer_status",
+    "limitations"
+  ],
+  "properties": {
+    "protocol_version": { "const": "0.1" },
+    "report_id": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "page_count", "title"],
+      "properties": {
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "page_count": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "doi": { "type": "string", "minLength": 1 }
+      }
+    },
+    "reading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claimed_level"],
+      "properties": {
+        "claimed_level": {
+          "enum": [
+            "R0_DISCOVERED",
+            "R1_ABSTRACT_VERIFIED",
+            "R2_TARGETED_VERIFIED",
+            "R3_FULL_TEXT_VERIFIED"
+          ]
+        },
+        "target_question": { "type": "string" }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["abstract_pages", "required_pages", "required_sections", "sections_read"],
+      "properties": {
+        "abstract_pages": { "$ref": "#/$defs/pages" },
+        "required_pages": { "$ref": "#/$defs/pages" },
+        "required_sections": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "sections_read": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "supplementary_status": {
+          "enum": ["not_applicable", "not_accessed", "partial", "verified"]
+        }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claim" }
+    },
+    "answer_status": {
+      "enum": ["complete", "provisional", "insufficient_evidence"]
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "pages": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 1 },
+      "uniqueItems": true
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_id", "claim_text", "epistemic_status", "evidence_refs"],
+      "properties": {
+        "claim_id": { "type": "string", "minLength": 1 },
+        "claim_text": { "type": "string", "minLength": 1 },
+        "epistemic_status": {
+          "enum": ["direct", "author_interpretation", "inference"]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/evidence" }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["page", "quote", "support_type"],
+      "properties": {
+        "page": { "type": "integer", "minimum": 1 },
+        "section": { "type": "string" },
+        "figure": { "type": "string" },
+        "quote": { "type": "string", "minLength": 8 },
+        "support_type": {
+          "enum": ["supports", "contradicts", "qualifies", "context"]
+        }
+      }
+    }
+  }
+}
