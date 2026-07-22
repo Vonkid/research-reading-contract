@@ -1,5 +1,7 @@
 # Research Reading Contract
 
+[![CI](https://github.com/Vonkid/research-reading-contract/actions/workflows/ci.yml/badge.svg)](https://github.com/Vonkid/research-reading-contract/actions/workflows/ci.yml)
+
 Research Reading Contract (RRC) is a small, model-agnostic protocol for making scientific PDF reading claims auditable.
 
 It addresses a common failure mode in research agents: an answer says it read the full paper when the model saw only an abstract, a few retrieved chunks, or an unverified summary. RRC separates three questions that are often blurred together:
